@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from .models import Instructor, Course, Lesson
 from .serializers import InstructorSerializer, CourseSerializer, LessonSerializer
 from rest_framework import status
+from rest_framework import generics
 
 
 
@@ -19,6 +20,19 @@ class InstructorAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class InstructorUpdateView(generics.UpdateAPIView):
+    queryset = Instructor.objects.all()
+    serializer_class = InstructorSerializer
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.kwargs['pk'])
+
+class InstructorDeleteView(generics.DestroyAPIView):
+    queryset = Instructor.objects.all()
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.kwargs['pk'])
 
 
 
@@ -37,6 +51,20 @@ class CourseAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class CourseUpdateView(generics.UpdateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.kwargs['pk'])
+
+class CourseDeleteView(generics.DestroyAPIView):
+        queryset = Course.objects.all()
+
+        def get_object(self):
+            return self.get_queryset().get(pk=self.kwargs['pk'])
+
+
 
 class LessonAPIView(APIView):
 
@@ -52,3 +80,17 @@ class LessonAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class LessonUpdateView(generics.UpdateAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.kwargs['pk'])
+
+
+class LessonDeleteView(generics.DestroyAPIView):
+    queryset = Lesson.objects.all()
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.kwargs['pk'])
